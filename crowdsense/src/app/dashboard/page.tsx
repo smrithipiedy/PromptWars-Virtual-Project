@@ -84,13 +84,28 @@ export default function DashboardPage() {
               Operations Dashboard
             </h1>
             {venue && (
-              <p className="text-xs text-[#7070a0] mt-1 flex items-center gap-1.5">
-                <Building2 className="w-3.5 h-3.5" />
-                Venue: <span className="font-semibold text-[#e8e8f0]">{venue.venueName}</span>
-                {venue.formattedAddress && (
-                  <span className="text-[#404060]">· {venue.formattedAddress}</span>
+              <div className="mt-1.5 flex flex-col gap-1.5">
+                <p className="text-xs text-[#7070a0] flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5" />
+                  Venue: <span className="font-semibold text-[#e8e8f0]">{venue.venueName}</span>
+                  {venue.verified && (
+                    <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-[9px] font-black text-blue-400 uppercase tracking-tighter ml-1">
+                      <CheckCircle className="w-2.5 h-2.5" /> Verified
+                    </span>
+                  )}
+                  {venue.formattedAddress && (
+                    <span className="text-[#404060]">· {venue.formattedAddress}</span>
+                  )}
+                </p>
+                {venue.verified?.rating && (
+                  <div className="flex items-center gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <span key={i} className={`text-[10px] ${i < Math.floor(venue.verified!.rating!) ? "text-yellow-500" : "text-[#202030]"}`}>★</span>
+                    ))}
+                    <span className="text-[10px] text-[#404060] font-bold ml-1">Google Maps Rating: {venue.verified.rating}</span>
+                  </div>
                 )}
-              </p>
+              </div>
             )}
           </div>
           <div className="flex items-center gap-3 shrink-0">

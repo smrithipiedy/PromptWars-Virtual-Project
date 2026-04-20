@@ -3,7 +3,9 @@
 import { useState, useRef } from "react";
 import { Upload, Loader2, Globe, MapPin, CheckCircle, AlertTriangle, X, LayoutGrid, ArrowRight, ImageIcon } from "lucide-react";
 import { useFloorPlanData } from "@/hooks/useFloorPlanData";
+import { compressImage } from "@/lib/image-utils";
 import Image from "next/image";
+import { logger } from "@/lib/logger";
 
 export function FloorPlanAnalyzer() {
   const [isUploading, setIsUploading] = useState(false);
@@ -27,14 +29,11 @@ export function FloorPlanAnalyzer() {
     setError(null);
 
     try {
-      const reader = new FileReader();
-      const base64Promise = new Promise<string>((resolve) => {
-        reader.onload = () => resolve(reader.result as string);
-        reader.readAsDataURL(file);
-      });
-      const base64 = await base64Promise;
-      const base64Data = base64.split(",")[1];
-      const mimeType = file.type;
+      // Compress image client-side for Efficiency
+      logger.info(`Starting client-side compression for ${file.name} (${(file.size / 1024).toFixed(1)} KB)`);
+      const base64Data = await compressImage(file);
+      const mimeType = "image/jpeg"; // Compression utility converts to jpeg
+      logger.info("Compression complete. Sending to Gemini AI...");
 
       // Single combined API call — halves quota usage
       const response = await fetch("/api/analyze", {

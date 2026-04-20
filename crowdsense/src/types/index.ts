@@ -51,6 +51,12 @@ export interface VenueLocation {
     venueType: string;
     peakHours: string;
   };
+  verified?: {
+    placeId: string;
+    rating?: number;
+    types?: string[];
+    photoUrl?: string;
+  };
 }
 
 export interface FloorPlanAnalysis {

@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { href: "/dashboard", label: "Dashboard",icon: LayoutDashboard },
   { href: "/analyzer",  label: "Analyzer", icon: ScanLine },
   { href: "/attendee",  label: "Live Map", icon: Map },
+  { href: "/safety",    label: "Safety",   icon: Shield },
 ];
 
 export function Navbar() {
