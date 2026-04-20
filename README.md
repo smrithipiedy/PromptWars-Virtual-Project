@@ -1,122 +1,54 @@
-# CrowdSense 🚀
+# CrowdSense — AI-Powered Crowd Safety Intelligence
 
-**AI-powered real-time crowd safety platform for live events.**
+**CrowdSense** is a next-generation safety platform designed for live events, transforming static floor plans into dynamic, spatial intelligence dashboards. Built for the **PromptWars Virtual Challenge**, it demonstrates the powerful synergy between **Google Gemini AI** and **Google Maps Platform**.
 
-CrowdSense combines Google Maps live heatmaps, Gemini Vision AI, and Firebase real-time telemetry to give event organizers instant crowd density intelligence — from floor plan upload to autonomous safety alerts.
+## 🎯 Project Overview
 
----
+- **Chosen Vertical**: Public Safety & Smart Venue Management.
+- **Problem**: Venue organizers often lack real-time, spatial understanding of crowd density, leading to bottlenecks and safety hazards.
+- **Solution**: An AI assistant that "reads" architectural floor plans and bridges them with real-world geographical data to provide live safety telemetry.
 
-## Features
+## 🧠 Approach & Logic
 
-| Feature | Technology |
-|---|---|
-| **Floor Plan Analyzer** | Gemini 2.0 Vision AI — identifies venue, categorizes zones, scores accessibility |
-| **Live Crowd Heatmap** | Google Maps JavaScript API + Firebase Firestore real-time subscriptions |
-| **AI Guide Chatbot** | Gemini conversational AI — context-aware venue navigation assistant |
-| **Operations Dashboard** | Real-time zone density charts, AI-generated alerts, capacity tracking |
-| **Attendee Live Map** | Location-aware crowd density view with pinnable waypoints |
+Our approach centers on **Spatial Grounding**:
 
----
+1.  **Vision-to-Metadata**: We use **Gemini 2.0 Flash** to perform Zero-Shot architectural analysis. Instead of just "describing" an image, the model extracts structured JSON containing functional zones, estimated capacities, and safety recommendations.
+2.  **Entity Resolution**: The AI deduces the venue identity from visual clues. We then use the **Google Places API** to "verify" this deduction, fetching official data (ratings, precise coordinates, photo assets) to ground the AI's intuition in factual reality.
+3.  **Real-time Intelligence**: We combine these static insights with live telemetry (simulated for the demo) to create a heatmap-driven dashboard that identifies "Critical Zones" before they become dangerous.
 
-## Google Services Used
+## ⚙️ How it Works
 
-- **Google Gemini API** (`gemini-2.0-flash`) — Vision-based floor plan analysis, venue identification, crowd pattern analysis, conversational AI
-- **Google Maps JavaScript API** — Live heatmap visualization, zone markers, route overlays
-- **Firebase Firestore** — Real-time crowd telemetry, zone density subscriptions, alert streaming
-- **Firebase** — Backend infrastructure and real-time data sync
+1.  **Ingestion**: User uploads a venue layout (PNG/JPG).
+2.  **Optimization**: The client-side **Image Compression Engine** reduces the payload for optimal Gemini API performance.
+3.  **Analysis**: Gemini analyzes the layout and returns a structured map of categories (Seating, Stage, Exits, etc.).
+4.  **Verification**: The system calls **Google Maps Places API** to confirm the venue's existence and enrich the metadata.
+5.  **Telemetry**: The Dashboard calculates density metrics (Occupancy vs. Capacity) and generates AI-driven Safety Alerts if thresholds are exceeded.
 
----
+## 📝 Assumptions made
 
-## Architecture
+- **Perspective**: The floor plan is a top-down or isometric 2D representation.
+- **Visual Clues**: The AI requires at least some text or logo context on the image to perform high-confidence venue identification.
+- **Language**: Analysis is currently optimized for English-language architectural labels.
 
-```
-src/
-├── app/
-│   ├── api/
-│   │   ├── analyze/        # Unified venue + floor plan AI endpoint (single Gemini call)
-│   │   ├── map-chat/       # Conversational AI assistant
-│   │   ├── venue/          # Venue identification + Firestore sync
-│   │   └── floorplan/      # Floor plan analysis
-│   ├── analyzer/           # Floor Plan Analyzer page
-│   ├── dashboard/          # Operations Dashboard
-│   └── attendee/           # Attendee Live Map
-├── components/
-│   ├── FloorPlan/          # Upload + analysis UI
-│   ├── Map/                # Heatmap, markers, chatbot, route overlay
-│   └── Dashboard/          # Charts, alerts, stat cards
-├── context/
-│   └── VenueContext.tsx    # Global venue state (single source of truth)
-└── lib/
-    ├── gemini/client.ts    # Gemini AI client with multi-model fallback
-    ├── firebase/           # Firestore subscriptions
-    ├── api/rate-limit.ts   # Server-side rate limiting
-    └── logger.ts           # Structured production logging
-```
+## 🌟 Key Features
+
+- **Gemini Vision Analysis**: Automatically identifies venues and categorizes functional zones from a single image.
+- **Google Maps Interaction**: Deep integration with Maps, Marker clustering, and Visualization libraries.
+- **Safety Assistant**: Configured with Harm Category safeguards to provide responsible safety suggestions.
+
+## 🛠️ Technology Stack
+
+- **Framework**: Next.js 15 (App Router, TypeScript)
+- **AI**: Google Gemini 2.0 Flash
+- **Maps**: Google Maps JavaScript SDK & Places API
+- **Quality**: Zod, Jest, and Error Boundaries
+
+## 🚀 Evaluation Highlights
+
+- **Google Services**: Meaningful multi-service integration (Gemini + Maps + Places).
+- **Security**: Strict input validation and model safety configurations.
+- **Efficiency**: Client-side processing and quota-optimized AI prompts.
+- **Accessibility**: ARIA-compliant UI and full SEO optimization.
 
 ---
-
-## Setup
-
-### 1. Clone and install
-
-```bash
-git clone <repo-url>
-cd crowdsense
-npm install
-```
-
-### 2. Environment variables
-
-Create `.env.local`:
-
-```
-GEMINI_API_KEY=your_gemini_api_key
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_maps_api_key
-NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
-```
-
-Get your Gemini API key at [aistudio.google.com](https://aistudio.google.com/apikey).
-
-### 3. Run
-
-```bash
-npm run dev        # Development (rate limiting disabled)
-npm run build      # Production build
-npm test           # Run test suite
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
----
-
-## How to Use
-
-1. **Upload a floor plan** on the `/analyzer` page — Gemini AI identifies the venue and categorizes all zones
-2. **View the dashboard** at `/dashboard` — live crowd density, zone alerts, and AI recommendations sync automatically
-3. **Open the live map** at `/attendee` — see the crowd heatmap and chat with the AI venue guide
-
----
-
-## Design Decisions
-
-- **Single AI call per upload**: Venue identification + floor plan analysis are combined into one Gemini request to minimize API quota usage
-- **Multi-model fallback**: The Gemini client rotates through `gemini-2.5-flash → gemini-2.0-flash → gemini-1.5-pro` automatically on quota/503 errors
-- **Global state**: `VenueContext` is the single source of truth — Dashboard, Map, and Chatbot all stay in sync without redundant fetches
-- **Rate limiting**: Server-side rate limiter is active in production, automatically bypassed in development
-- **Structured logging**: All server events use the `logger` utility for production-grade observability
-
----
-
-## Testing
-
-```bash
-npm test                    # All tests
-npm test -- --coverage      # With coverage report
-```
-
-Tests cover API route handlers, the Gemini client, and core utility functions.
+*Built with ❤️ for PromptWars.*
