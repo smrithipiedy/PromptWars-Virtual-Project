@@ -50,5 +50,7 @@ Our approach centers on **Spatial Grounding**:
 - **Efficiency**: Client-side processing and quota-optimized AI prompts.
 - **Accessibility**: ARIA-compliant UI and full SEO optimization.
 
+## 👩🏻‍💻 Live demo link: https://crowdsense-nine.vercel.app/
+
 ---
 *Built with ❤️ for PromptWars.*
